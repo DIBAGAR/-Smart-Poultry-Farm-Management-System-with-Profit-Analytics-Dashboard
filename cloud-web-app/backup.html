@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archive Ledger | DKS Business</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        #popup-center {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            padding: 20px 40px; border-radius: 12px; z-index: 99999;
+            display: none; text-align: center; font-family: 'Inter'; font-weight: 800;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+        }
+        #app-content { display: none; }
+        .active-link { background: rgba(255, 215, 0, 0.15); border-left: 4px solid #ffd700; color: #ffd700 !important; }
+        .filter-card { background: #111; padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #333; display: flex; gap: 15px; align-items: flex-end; flex-wrap: wrap; }
+        .filter-group { display: flex; flex-direction: column; gap: 5px; }
+        .filter-group label { font-size: 11px; color: #888; text-transform: uppercase; }
+        input[type="date"] { background: #222; border: 1px solid #444; color: white; padding: 10px; border-radius: 6px; }
+        #bulkDeleteBtn { background: #ff4757; color: white; border: none; padding: 12px 20px; border-radius: 8px; font-weight: 800; cursor: pointer; display: none; }
+        
+        /* Modal Style */
+        #deleteModal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:100000; align-items:center; justify-content:center; padding: 20px; }
+        .modal-box { background:#1a1a1a; padding:30px; border-radius:15px; border:1px solid #ff4757; text-align:center; width:100%; max-width:400px; }
+   
+   
+   
+   </style>
+</head>
+<body>
+
+    <div id="popup-center"></div>
+
+    <div id="deleteModal">
+        <div class="modal-box">
+            <div style="font-size: 50px; margin-bottom: 15px;">⚠️</div>
+            <h2 style="color:white; margin-bottom:10px; font-family:'Cinzel';">Confirm Delete</h2>
+            <p style="color:#aaa; margin-bottom:25px;">Permanently delete <span id="modalCount" style="color:#ff4757; font-weight:800;">0</span> selected items?</p>
+            <div style="display:flex; gap:15px; justify-content:center;">
+                <button id="cancelDelete" style="background:#333; color:white; border:none; padding:12px 25px; border-radius:8px; cursor:pointer; font-weight:bold;">CANCEL</button>
+                <button id="confirmDeleteBtn" style="background:#ff4757; color:white; border:none; padding:12px 25px; border-radius:8px; cursor:pointer; font-weight:bold;">DELETE NOW</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="security-check" style="position: fixed; inset: 0; background: #0a0f1d; color: white; display: flex; align-items: center; justify-content: center; z-index: 99998;">
+        <div style="text-align: center;">
+            <h1 style="color: #ffd700; font-family: 'Cinzel';">DKS ARCHIVE</h1>
+            <p>Verifying Credentials...</p>
+        </div>
+    </div>
+
+    <div id="app-content">
+        <div class="nav-menu-container">
+            <div class="hamburger-icon" id="menuToggle">☰</div>
+            <nav class="sidebar-nav">
+    <div style="text-align: center; margin-bottom: 25px;">
+        <img src="images/logo.jpg" style="width: 70px; border-radius: 50%; border: 2px solid var(--accent-gold); box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);">
+        <h2 style="font-family: 'Cinzel'; font-size: 14px; margin-top: 10px; color: white; letter-spacing: 1px;">DKS BUSINESS</h2>
+    </div>
+
+    <div style="font-size: 10px; color: var(--accent-gold); margin: 10px 0 5px 20px; letter-spacing: 1px; opacity: 0.7;">LIVE PRODUCTION</div>
+    <a href="chicks.html">🐣 Chicks Log</a>
+    
+
+    <div style="margin: 15px 20px; border-top: 1px solid var(--border-glass);"></div>
+
+    <div style="font-size: 10px; color: var(--accent-gold); margin: 0 0 5px 20px; letter-spacing: 1px; opacity: 0.7;">FINANCIALS</div>
+    <a href="index.html">🏠 Dashboard</a>
+    <a href="sales.html">📈 Sales Log</a>
+    <a href="purchase.html">🛒 Purchase Log</a>
+    <a href="medicine.html">💊 Medicine</a>
+    <a href="food.html">🌾 Food Log</a>
+
+    <button onclick="logoutSession()" class="sidebar-logout" style="margin-top: auto;">🔒 Logout Session</button>
+</nav>
+        </div>
+
+        <div class="container" style="padding-top: 40px;">
+            <h1 style="text-align: center; color: #74b27e; font-family: 'Cinzel'; margin-bottom: 30px;">ARCHIVE LEDGER</h1>
+
+           <div class="filter-card" style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 20px;">
+    <div style="display: flex; flex-direction: column; gap: 5px;">
+        <label style="font-size: 11px; color: var(--text-muted);">FROM</label>
+        <input type="date" id="fromDate">
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 5px;">
+        <label style="font-size: 11px; color: var(--text-muted);">TO</label>
+        <input type="date" id="toDate">
+    </div>
+    <button id="filterBtn" class="filter-btn">FILTER</button>
+    <button id="clearBtn" style="background: var(--card-glass); color: var(--text-main); border: 1px solid var(--border-glass); padding: 12px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.3s;">CLEAR</button>
+    
+    <button id="bulkDeleteBtn" class="delete-btn" style="display:none; padding: 12px 20px; font-weight: bold;">🗑️ DELETE (<span id="selectedCount">0</span>)</button>
+    <button id="exportBtn" class="export-btn" style="margin-left: auto;">📊 EXCEL</button>
+</div>
+
+            <div class="table-container" style="background: #111; border-radius: 12px; border: 1px solid #333; overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; min-width: 1000px; color: white;">
+                    <thead style="background: rgba(255,215,0,0.1); color: #ffd700;">
+                        <tr>
+                            <th style="padding:15px;"><input type="checkbox" id="selectAll"></th>
+                            <th>Date</th>
+                <th>Breeders</th>
+                <th>Initial</th>
+                <th>Vac Status</th>
+                <th>Inc Wt</th>
+                <th>Send count</th>
+                <th>Rec count</th>
+                            <th style="text-align:center;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dataTable" style="text-align: center;"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="backup.js"></script>
+</body>
+</html>

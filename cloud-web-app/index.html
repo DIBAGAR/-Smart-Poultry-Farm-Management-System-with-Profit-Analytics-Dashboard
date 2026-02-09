@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | DKS Poultry Business</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        /* FIX: Calendar Icon Visibility in Dark Mode */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            cursor: pointer;
+            filter: invert(1); /* Turns the black icon white for dark theme */
+            opacity: 0.7;
+            transition: 0.3s;
+        }
+        input[type="date"]::-webkit-calendar-picker-indicator:hover {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="home-page">
+
+    <div id="security-check" style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: #0a0f1d; color: white; display: flex; align-items: center; justify-content: center; z-index: 9999; font-family: 'Inter', sans-serif;">
+        <div style="text-align: center;">
+            <div style="font-size: 50px; margin-bottom: 20px;">🔒</div>
+            <h2 style="color: #ffd700; font-family: 'Cinzel'; letter-spacing: 2px;">SECURITY VERIFICATION</h2>
+            <p style="opacity: 0.7; font-size: 14px;">Checking cloud credentials...</p>
+        </div>
+    </div>
+
+    <div id="app-content" style="display: none;">
+        <div class="nav-menu-container">
+            <div class="hamburger-icon">☰</div>
+            <nav class="sidebar-nav">
+    <div style="text-align: center; margin-bottom: 25px;">
+        <img src="images/logo.jpg" style="width: 70px; border-radius: 50%; border: 2px solid var(--accent-gold); box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);">
+        <h2 style="font-family: 'Cinzel'; font-size: 14px; margin-top: 10px; color: white; letter-spacing: 1px;">DKS BUSINESS</h2>
+    </div>
+
+    <div style="font-size: 10px; color: var(--accent-gold); margin: 10px 0 5px 20px; letter-spacing: 1px; opacity: 0.7;">LIVE PRODUCTION</div>
+    <a href="chicks.html">🐣 Chicks Log</a>
+    <a href="backup.html">📚 Batch Archive</a>
+
+    <div style="margin: 15px 20px; border-top: 1px solid var(--border-glass);"></div>
+
+    <div style="font-size: 10px; color: var(--accent-gold); margin: 0 0 5px 20px; letter-spacing: 1px; opacity: 0.7;">FINANCIALS</div>
+    
+    <a href="sales.html">📈 Sales Log</a>
+    <a href="purchase.html">🛒 Purchase Log</a>
+    <a href="medicine.html">💊 Medicine</a>
+    <a href="food.html">🌾 Food Log</a>
+
+    <button onclick="logoutSession()" class="sidebar-logout" style="margin-top: auto;">🔒 Logout Session</button>
+</nav>
+        </div>
+
+        <div class="container">
+            <header style="text-align: center; margin-bottom: 40px;">
+                <img src="images/logo.jpg" alt="Logo" style="width: 100px; border-radius: 50%; border: 3px solid var(--accent-gold); margin-bottom: 15px;">
+                <h1 class="page-title">DKS POULTRY</h1>
+                <div style="font-size: 12px; color: var(--text-muted); letter-spacing: 3px; margin-bottom: 10px;">MANAGEMENT SYSTEM</div>
+                <div style="display: flex; align-items: center; justify-content: center; font-size: 13px;">
+                    <span class="dot"></span> Online Session Active
+                </div>
+            </header>
+
+            <div class="totals-box" style="max-width: 500px; margin: 0 auto 40px auto; padding: 30px; border: 1px solid var(--accent-primary);">
+                <span class="label">TOTAL NET PROFIT / LOSS</span>
+                <div id="profitAmount" class="value" style="font-size: 42px; margin-top: 10px;">₹ 0.00</div>
+            </div>
+
+            <div class="totals-grid">
+                <a href="sales.html" style="text-decoration: none;">
+                    <div class="totals-box">
+                        <div style="font-size: 30px; margin-bottom: 10px;">📈</div>
+                        <span class="label">SALES</span>
+                        <span class="value" style="font-size: 16px;">View Revenue</span>
+                    </div>
+                </a>
+                <a href="purchase.html" style="text-decoration: none;">
+                    <div class="totals-box">
+                        <div style="font-size: 30px; margin-bottom: 10px;">🛒</div>
+                        <span class="label">PURCHASE</span>
+                        <span class="value" style="font-size: 16px;">Inventory</span>
+                    </div>
+                </a>
+                <a href="medicine.html" style="text-decoration: none;">
+                    <div class="totals-box">
+                        <div style="font-size: 30px; margin-bottom: 10px;">💊</div>
+                        <span class="label">MEDICINE</span>
+                        <span class="value" style="font-size: 16px;">Expenses</span>
+                    </div>
+                </a>
+                <a href="food.html" style="text-decoration: none;">
+                    <div class="totals-box">
+                        <div style="font-size: 30px; margin-bottom: 10px;">🌾</div>
+                        <span class="label">FOOD</span>
+                        <span class="value" style="font-size: 16px;">Nutrition</span>
+                    </div>
+                </a>
+            </div>
+
+            <h2 style="font-family: 'Cinzel'; font-size: 18px; color: var(--accent-gold); margin: 40px 0 20px 0; text-align: center;">FARM STATISTICS</h2>
+            
+            <div class="totals-box" style="text-align: left; padding: 25px;">
+                <div style="border-left: 3px solid var(--accent-primary); padding-left: 15px;">
+                    <p style="color: var(--text-main); line-height: 1.6;">
+                        <strong>Batch Status:</strong> Currently monitoring growth rate and FCR.<br>
+                        <strong>Recent Activity:</strong> Sales and Feed logs are being synced to the cloud.
+                    </p>
+                </div>
+                <div style="margin-top: 15px; font-size: 10px; color: var(--accent-gold); text-transform: uppercase; font-weight: 800;">
+                    ● Live Data Enabled
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="app.js"></script>
+</body>
+</html>

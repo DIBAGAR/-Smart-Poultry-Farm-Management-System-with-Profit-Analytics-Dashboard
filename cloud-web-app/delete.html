@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Deletion | DKS Security</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Hover effects for buttons */
+        .btn-cancel {
+            transition: all 0.3s ease;
+        }
+        .btn-cancel:hover {
+            background: rgba(255, 255, 255, 0.1) !important;
+            border-color: #ffffff !important;
+            transform: translateY(-2px);
+        }
+
+        .btn-confirm {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.2);
+        }
+        .btn-confirm:hover {
+            background: #ff5e6c !important;
+            box-shadow: 0 6px 20px rgba(255, 71, 87, 0.4) !important;
+            transform: translateY(-2px);
+        }
+        
+        /* Subtle entrance animation for the card */
+        .delete-card {
+            animation: fadeIn 0.4s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body style="background: #0a0f1d; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; overflow: hidden;">
+    
+    <div class="delete-card" style="text-align: center; background: #1a1f2c; padding: 40px; border-radius: 20px; border: 1px solid #ff4757; width: 90%; max-width: 500px; box-shadow: 0 0 30px rgba(255, 71, 87, 0.15);">
+        
+        <h1 style="font-family: 'Cinzel'; color: #ff4757; letter-spacing: 4px; margin-top: 0;">CONFIRM</h1>
+        
+        <p style="color: #a4b0be; font-family: 'Inter'; line-height: 1.6; margin-bottom: 30px; font-size: 15px;">
+            You are about to permanently remove a record from the <br>
+            <strong style="color: #ffffff;">[ <span id="displayColl" style="color: #ff4757;">...</span> ]</strong> ledger.<br>
+            This action is irreversible and will be logged.
+        </p>
+
+        <div style="display: flex; gap: 15px; justify-content: center;">
+            <button class="btn-cancel" onclick="window.history.back()" 
+                style="padding: 12px 30px; border-radius: 8px; border: 1px solid #444; background: transparent; color: white; cursor: pointer; font-family: 'Inter'; font-weight: 600; letter-spacing: 1px;">
+                CANCEL
+            </button>
+            
+            <button class="btn-confirm" id="finalDeleteBtn" 
+                style="padding: 12px 30px; border-radius: 8px; border: none; background: #ff4757; color: white; font-weight: 800; cursor: pointer; font-family: 'Inter'; letter-spacing: 1px;">
+                CONFIRM DELETE
+            </button>
+        </div>
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
