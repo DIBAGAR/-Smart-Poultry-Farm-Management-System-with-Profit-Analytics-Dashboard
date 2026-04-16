@@ -143,17 +143,17 @@ const FinancialLedger = ({ collectionName, title, fields, color }) => {
         XLSX.utils.book_append_sheet(wb, ws, "Report");
         
         try {
-            // Mobile-friendly download approach
-            const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-            const data = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });
-            const url = window.URL.createObjectURL(data);
+            // Mobile-friendly data URI approach (bypasses Blob restrictions on iOS/Android PWA)
+            const b64 = XLSX.write(wb, { bookType: 'xlsx', type: 'base64' });
+            const url = "data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64," + b64;
+            
             const link = document.createElement('a');
             link.href = url;
             link.download = `${collectionName}_Report.xlsx`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            window.URL.revokeObjectURL(url);
+            
             showToast('✅ Download started');
         } catch (e) {
             console.error('Export error, falling back to standard writeFile:', e);
