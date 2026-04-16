@@ -141,7 +141,24 @@ const FinancialLedger = ({ collectionName, title, fields, color }) => {
         const ws = XLSX.utils.json_to_sheet(rows);
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "Report");
-        XLSX.writeFile(wb, `${collectionName}_Report.xlsx`);
+        
+        try {
+            // Mobile-friendly download approach
+            const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+            const data = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });
+            const url = window.URL.createObjectURL(data);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `${collectionName}_Report.xlsx`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+            showToast('✅ Download started');
+        } catch (e) {
+            console.error('Export error, falling back to standard writeFile:', e);
+            XLSX.writeFile(wb, `${collectionName}_Report.xlsx`);
+        }
     };
 
     /* ---- Totals (live — exact original logic) ---- */
