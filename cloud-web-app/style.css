@@ -1,0 +1,462 @@
+/* =========================================
+   1. MODERN THEME VARIABLES
+   ========================================= */
+:root {
+    --bg-dark: #0a0f1d;
+    --card-glass: rgba(255, 255, 255, 0.05);
+    --border-glass: rgba(255, 255, 255, 0.1);
+    --accent-primary: #00d1b2; /* Turquoise */
+    --accent-gold: #ffd700;    /* Gold */
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --danger: #ff4757;
+    --success: #2ed573;
+}
+
+/* =========================================
+   2. GLOBAL RESET & BASE
+   ========================================= */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', -apple-system, sans-serif;
+}
+
+html, body {
+    overflow-x: hidden;
+    width: 100%;
+    background-color: var(--bg-dark);
+    background-image: 
+        radial-gradient(at 0% 0%, rgba(0, 209, 178, 0.1) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(255, 215, 0, 0.05) 0px, transparent 50%);
+    color: var(--text-main);
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    padding-top: 80px; 
+}
+
+/* FIX: Calendar Icon Visibility in Dark Theme */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    filter: invert(1);
+    opacity: 0.6;
+    transition: 0.3s;
+}
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+}
+
+/* =========================================
+   3. MODERN SIDEBAR (3-BAR HOVER)
+   ========================================= */
+.nav-menu-container {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 2000;
+}
+
+.hamburger-icon {
+    font-size: 24px;
+    cursor: pointer;
+    background: var(--card-glass);
+    backdrop-filter: blur(10px);
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid var(--border-glass);
+    color: var(--accent-primary);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: 0.3s;
+}
+
+.sidebar-nav {
+    position: fixed;
+    left: -280px;
+    top: 0;
+    width: 260px;
+    height: 100vh;
+    background: rgba(10, 15, 29, 0.98);
+    backdrop-filter: blur(25px);
+    border-right: 1px solid var(--border-glass);
+    transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    flex-direction: column;
+    padding: 40px 20px;
+    z-index: 1999;
+}
+
+.nav-menu-container:hover .sidebar-nav {
+    left: 0;
+}
+
+.nav-menu-container:hover .hamburger-icon {
+    border-color: var(--accent-gold);
+    color: var(--accent-gold);
+}
+
+.sidebar-nav a {
+    color: var(--text-muted);
+    text-decoration: none;
+    padding: 15px 20px;
+    margin: 5px 0;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 15px;
+}
+
+.sidebar-nav a:hover, .sidebar-nav a.active {
+    background: var(--card-glass);
+    color: var(--accent-primary);
+    transform: translateX(5px);
+}
+
+.sidebar-logout {
+    margin-top: auto;
+    background: rgba(255, 71, 87, 0.1);
+    color: var(--danger);
+    border: 1px solid var(--danger);
+    padding: 15px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: 0.3s;
+}
+
+.sidebar-logout:hover {
+    background: var(--danger);
+    color: white;
+    box-shadow: 0 0 20px rgba(255, 71, 87, 0.3);
+}
+
+/* =========================================
+   4. DASHBOARD & TOTALS
+   ========================================= */
+.page-title {
+    font-family: 'Cinzel', serif;
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: 30px;
+    letter-spacing: 2px;
+    color: #fff;
+}
+
+.totals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.totals-box {
+    background: var(--card-glass);
+    padding: 20px;
+    border-radius: 15px;
+    border: 1px solid var(--border-glass);
+    text-align: center;
+    transition: 0.3s;
+}
+
+.totals-box .label {
+    display: block;
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+
+.totals-box .value {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--accent-primary);
+}
+
+/* =========================================
+   5. FORMS & INPUTS
+   ========================================= */
+form {
+    background: var(--card-glass);
+    padding: 25px;
+    border-radius: 20px;
+    border: 1px solid var(--border-glass);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin-bottom: 30px;
+}
+
+input {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-glass);
+    padding: 12px;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 14px;
+    outline: none;
+    transition: 0.3s;
+}
+
+input:focus {
+    border-color: var(--accent-primary);
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.add-btn, .filter-btn, .export-btn {
+    background: var(--accent-primary);
+    color: #000;
+    font-weight: 700;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.export-btn {
+    background: linear-gradient(135deg, var(--accent-gold), #b8860b);
+    margin-top: 10px;
+    width: auto;
+    padding: 10px 20px;
+    align-self: flex-end;
+}
+
+/* =========================================
+   6. DATA TABLE
+   ========================================= */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    background: var(--card-glass);
+    border-radius: 15px;
+    border: 1px solid var(--border-glass);
+    margin-bottom: 50px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 900px; /* Slight increase for better spacing */
+}
+
+th {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--accent-primary);
+    padding: 15px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+td {
+    padding: 15px;
+    border-bottom: 1px solid var(--border-glass);
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.edit-btn { color: var(--accent-primary); background: none; border: 1px solid var(--accent-primary); padding: 5px 8px; border-radius: 5px; cursor: pointer; margin-right: 5px; transition: 0.3s; }
+.edit-btn:hover { background: var(--accent-primary); color: #000; }
+
+.delete-btn { color: var(--danger); background: none; border: 1px solid var(--danger); padding: 5px 8px; border-radius: 5px; cursor: pointer; transition: 0.3s; }
+.delete-btn:hover { background: var(--danger); color: white; }
+
+/* =========================================
+   7. RESPONSIVE & ANIMATIONS
+   ========================================= */
+@media (max-width: 768px) {
+    .totals-grid { grid-template-columns: 1fr 1fr; }
+    form { grid-template-columns: 1fr; }
+    .page-title { font-size: 22px; }
+}
+
+.dot {
+    height: 8px; width: 8px;
+    background-color: var(--success);
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 5px;
+    box-shadow: 0 0 10px var(--success);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(46, 213, 115, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(46, 213, 115, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(46, 213, 115, 0); }
+}
+
+
+
+
+#overlayFields label {
+    font-size: 11px;
+    color: var(--accent-gold);
+    text-transform: uppercase;
+    margin-bottom: -8px;
+    font-weight: bold;
+}
+
+#overlayFields input, #overlayFields select {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.parent-card { text-align: center; min-width: 90px; }
+.parent-card img { 
+    width: 70px; height: 70px; border-radius: 50%; 
+    border: 2px solid var(--accent-gold); object-fit: cover; 
+}
+
+
+
+
+#jw-detail-page {
+    position: fixed;
+    inset: 0;
+    background: #121212;
+    z-index: 20000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.neat-card {
+    background: #1e1e1e;
+    width: 100%;
+    max-width: 400px;
+    padding: 30px;
+    border-radius: 15px;
+    border: 1px solid #333;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.neat-card h3 {
+    color: #ffd700;
+    margin-bottom: 20px;
+    text-align: center;
+    letter-spacing: 2px;
+}
+
+#jw-display-area p {
+    margin: 15px 0;
+    font-size: 16px;
+    color: #ccc;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #222;
+    padding-bottom: 5px;
+}
+
+#jw-display-area span {
+    color: white;
+    font-weight: bold;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.modal-btns {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* For Mobile Cursor interaction */
+[contenteditable="true"] {
+    outline: none;
+    cursor: text;
+}
+
+
+
+/* =========================================
+   SIDE-BY-SIDE MOBILE FILTER
+   ========================================= */
+.filter-section {
+    background: var(--card-glass);
+    padding: 15px;
+    border-radius: 20px; 
+    border: 1px solid var(--border-glass);
+    margin-bottom: 25px;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column; /* Stack the wrapper and the button */
+    gap: 12px;
+}
+
+/* This forces the inputs to stay side-by-side */
+.date-inputs-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Exactly two equal columns */
+    gap: 8px;
+    width: 100%;
+}
+
+.input-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.input-item label {
+    font-size: 10px;
+    color: var(--accent-gold);
+    text-transform: uppercase;
+    font-weight: 800;
+}
+
+.filter-group input[type="date"] {
+    padding: 8px 5px; /* Tighter padding for mobile */
+    font-size: 12px;
+    height: 38px;
+    width: 100%; /* Fills half the screen */
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--border-glass);
+    border-radius: 8px;
+    color: white;
+}
+
+.filter-btn {
+    width: 100%;
+    height: 40px;
+    background: var(--accent-primary);
+    color: #000;
+    font-weight: 700;
+    border-radius: 8px;
+    border: none;
+}
+
+/* Desktop Adjustment */
+@media (min-width: 768px) {
+    .filter-group {
+        flex-direction: row; /* Go horizontal on desktop */
+        align-items: flex-end;
+    }
+    .date-inputs-wrapper {
+        width: auto;
+        grid-template-columns: 150px 150px; /* Fixed width on desktop */
+    }
+    .filter-btn {
+        width: 120px;
+    }
+}

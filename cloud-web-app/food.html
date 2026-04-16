@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Log | DKS Business</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    
+    <style>
+        /* FIX: Calendar Icon Visibility in Dark Mode */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            cursor: pointer;
+            filter: invert(1); /* Makes the black icon white for dark backgrounds */
+            opacity: 0.7;
+            transition: 0.3s;
+        }
+        input[type="date"]::-webkit-calendar-picker-indicator:hover {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body data-collection="food">
+
+    <div id="security-check" style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: #0a0f1d; color: white; display: flex; align-items: center; justify-content: center; z-index: 9999; font-family: 'Inter', sans-serif;">
+        <div style="text-align: center;">
+            <div style="font-size: 50px; margin-bottom: 20px;">🔒</div>
+            <h2 style="color: #ffd700; font-family: 'Cinzel'; letter-spacing: 2px;">SECURITY VERIFICATION</h2>
+            <p style="opacity: 0.7; font-size: 14px;">Verifying access to Nutrition Logs...</p>
+        </div>
+    </div>
+
+    <div id="app-content" style="display: none;">
+        <div class="nav-menu-container">
+            <div class="hamburger-icon">☰</div>
+            <nav class="sidebar-nav">
+    <div style="text-align: center; margin-bottom: 25px;">
+        <img src="images/logo.jpg" style="width: 70px; border-radius: 50%; border: 2px solid var(--accent-gold); box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);">
+        <h2 style="font-family: 'Cinzel'; font-size: 14px; margin-top: 10px; color: white; letter-spacing: 1px;">DKS BUSINESS</h2>
+    </div>
+
+    <div style="font-size: 10px; color: var(--accent-gold); margin: 10px 0 5px 20px; letter-spacing: 1px; opacity: 0.7;">LIVE PRODUCTION</div>
+    <a href="chicks.html">🐣 Chicks Log</a>
+    <a href="backup.html">📚 Batch Archive</a>
+
+    <div style="margin: 15px 20px; border-top: 1px solid var(--border-glass);"></div>
+
+    <div style="font-size: 10px; color: var(--accent-gold); margin: 0 0 5px 20px; letter-spacing: 1px; opacity: 0.7;">FINANCIALS</div>
+    <a href="index.html">🏠 Dashboard</a>
+    <a href="sales.html">📈 Sales Log</a>
+    <a href="purchase.html">🛒 Purchase Log</a>
+    <a href="medicine.html">💊 Medicine</a>
+    
+
+    <button onclick="logoutSession()" class="sidebar-logout" style="margin-top: auto;">🔒 Logout Session</button>
+</nav>
+        </div>
+
+        <div class="container">
+            <h1 class="page-title">FEED & INFRA</h1>
+
+            <div class="totals-grid">
+                <div class="totals-box"npm install -g firebase-tools>
+                    <span class="label">Total Feed Expenses</span>
+                    <div class="value" style="color: var(--danger);">₹ <span id="totalPrice">0.00</span></div>
+                </div>
+            </div>
+            <div class="filter-section">
+    <div class="filter-group">
+        <div class="date-inputs-wrapper">
+            <div class="input-item">
+                <label>From</label>
+                <input type="date" id="fromDate">
+            </div>
+            <div class="input-item">
+                <label>To</label>
+                <input type="date" id="toDate">
+            </div>
+        </div>
+        
+        <button class="filter-btn" id="filterBtn">Filter</button>
+    </div>
+</div>
+            <form id="dataForm">
+                <input type="date" name="date" required>
+                <input type="text" name="product" placeholder="Feed Type (e.g. Starter/Finisher)" required>
+                <input type="number" name="qty" placeholder="Bags / Quantity" required>
+                <input type="number" step="0.01" name="price" placeholder="Total Cost (₹)" required>
+                <button type="submit" class="add-btn">Add Feed Entry</button>
+            </form>
+
+            <div style="display: flex; justify-content: flex-end; margin-bottom: 15px;">
+                <button class="export-btn" id="exportBtn" onclick="exportToExcel()">📊 Export Medicine Report</button>
+            </div>
+
+            <div class="table-container" style="margin-top: 30px;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Date</th>
+                            <th>Feed Type</th>
+                            <th>Qty</th>
+                            <th>Total Cost</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dataTable">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+     
+    <script type="module" src="app.js"></script>
+    
+</body>
+</html>

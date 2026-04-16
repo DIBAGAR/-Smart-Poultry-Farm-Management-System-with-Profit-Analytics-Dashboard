@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | DKS Business</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="login.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    
+    <style>
+        /* Consistency check: Ensuring even login-specific date fields 
+           (if added later) follow the visibility fix */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            cursor: pointer;
+            filter: invert(1);
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <img src="images/logo.jpg" alt="Logo" class="logo">
+        <h1>DKS BUSINESS...</h1>
+        
+        <form id="loginForm">
+            <input type="text" id="username" placeholder="Username" required autocomplete="username">
+            <input type="password" id="password" placeholder="Password" required autocomplete="current-password">
+            <button type="submit" class="login-btn">Secure Login</button>
+        </form>
+
+        <div id="loginMsg"></div>
+
+        <button class="reset-btn" id="resetBtn">Forgot Password? Get it via Email</button>
+    </div>
+
+    
+    <script type="module" src="app.js"></script>
+
+</body>
+</html>

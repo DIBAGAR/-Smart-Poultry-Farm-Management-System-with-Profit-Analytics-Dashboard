@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chicks Log | DKS Business</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --accent-gold: #70d9a3;
+            --bg-dark: #0a0f1d;
+            --card-glass: rgba(255, 255, 255, 0.03);
+            --border-glass: rgba(255, 255, 255, 0.1);
+        }
+
+        body { font-family: 'Inter', sans-serif; background: var(--bg-dark); color: white; margin: 0; }
+
+        /* 1. LOADING SCREEN */
+        #security-check {
+            position: fixed; inset: 0; background: var(--bg-dark); z-index: 99999;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+
+        /* 2. SIDEBAR NAVIGATION (Exact Ledger Style) */
+        .sidebar-nav {
+            position: fixed; top: 0; left: -280px; width: 260px; height: 100%;
+            background: var(--bg-dark); z-index: 20000; transition: left 0.3s ease-in-out;
+            padding: 20px; box-shadow: 5px 0 15px rgba(0,0,0,0.5); display: flex; flex-direction: column;
+            border-right: 1px solid var(--border-glass);
+        }
+        .sidebar-nav.active { left: 0 !important; }
+        
+        .sidebar-nav a {
+            color: #ccc; text-decoration: none; padding: 12px 20px; border-radius: 8px;
+            margin-bottom: 5px; transition: 0.3s; font-size: 14px; display: block;
+        }
+        .sidebar-nav a:hover, .sidebar-nav a.active {
+            background: rgba(255, 215, 0, 0.1); color: var(--accent-gold);
+        }
+
+        .sidebar-logout {
+            margin-top: auto; background: #ff4757; color: white; border: none; 
+            padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold;
+        }
+
+        /* 3. BREEDING ASSETS UI */
+        .parent-wrapper { text-align: center; flex-shrink: 0; width: 85px; }
+        .parent-box { 
+            width: 75px; height: 75px; background: #1a1a1a; border-radius: 50%; 
+            border: 2px solid #333; display: flex; align-items: center; justify-content: center; 
+            overflow: hidden; transition: 0.3s; cursor: pointer; margin: 0 auto;
+        }
+        .parent-box:hover { border-color: var(--accent-gold); transform: translateY(-3px); box-shadow: 0 0 15px rgba(255, 215, 0, 0.2); }
+        .parent-box img { width: 100%; height: 100%; object-fit: cover; }
+        .parent-name-label { font-size: 11px; margin-top: 8px; color: #fff; font-weight: 500; }
+
+        /* 4. ACTION BUTTONS (Gold Theme) */
+        .action-icon-btn { 
+            border: 1px solid var(--accent-gold) !important;
+            border-radius: 8px !important;
+            padding: 6px 12px !important;
+            background: transparent !important;
+            color: var(--accent-gold) !important;
+            cursor: pointer; transition: 0.2s;
+        }
+        .action-icon-btn:hover { background: var(--accent-gold) !important; color: #000 !important; }
+
+        /* 5. TABLE STYLING */
+        .table-container { overflow-x: auto; background: var(--card-glass); border-radius: 12px; border: 1px solid var(--border-glass); }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: rgba(0,0,0,0.4); color: var(--accent-gold); font-family: 'Cinzel'; font-size: 12px; padding: 15px; }
+        td { padding: 12px; border-bottom: 1px solid var(--border-glass); text-align: center; font-size: 13px; }
+        /* Update this in your HTML <style> */
+
+            
+    </style>
+</head>
+<body data-collection="chicks">
+
+    <div id="security-check">
+        <div style="text-align: center;">
+            <div style="font-size: 50px; margin-bottom: 20px;">🐣</div>
+            <h2 style="color: var(--accent-gold); font-family: 'Cinzel'; letter-spacing: 2px;">DKS PRODUCTION</h2>
+            <p style="opacity: 0.7; font-size: 12px;">SYNCHRONIZING BATCH DATA...</p>
+        </div>
+    </div>
+
+    <div id="app-content">
+        <div class="nav-menu-container">
+            <div class="hamburger-icon" id="menuBtn">☰</div>
+            <nav id="sidebar" class="sidebar-nav">
+                <div style="text-align: center; margin-bottom: 25px;">
+                    <img src="images/logo.jpg" style="width: 70px; border-radius: 50%; border: 2px solid var(--accent-gold); box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);">
+                    <h2 style="font-family: 'Cinzel'; font-size: 14px; margin-top: 10px; color: white; letter-spacing: 1px;">DKS BUSINESS</h2>
+                </div>
+
+                <div style="font-size: 10px; color: var(--accent-gold); margin: 10px 0 5px 20px; letter-spacing: 1px; opacity: 0.7;">LIVE PRODUCTION</div>
+                <a href="chicks.html" class="active">🐣 Chicks Log</a>
+                <a href="backup.html">📚 Batch Archive</a>
+
+                <div style="margin: 15px 20px; border-top: 1px solid var(--border-glass);"></div>
+
+                <div style="font-size: 10px; color: var(--accent-gold); margin: 0 0 5px 20px; letter-spacing: 1px; opacity: 0.7;">FINANCIALS</div>
+                <a href="index.html">🏠 Dashboard</a>
+                <a href="sales.html">📈 Sales Log</a>
+                <a href="purchase.html">🛒 Purchase Log</a>
+                <a href="medicine.html">💊 Medicine</a>
+                <a href="food.html">🌾 Food Log</a>
+
+                <button onclick="logoutSession()" class="sidebar-logout">🔒 Logout Session</button>
+            </nav>
+        </div>
+
+        <div class="container" style="padding: 0 20px 40px;">
+            
+            <h1 style=" font-family: 'Cinzel', serif;
+    font-size: 28px;
+    text-align: center;
+    margin-top: 65px;
+    margin-bottom: 30px;
+    letter-spacing: 2px;
+    color: #77be76;">CHICKS PRODUCTION</h1>
+            
+            <div style="background: var(--card-glass); padding: 20px; border-radius: 15px; border: 1px solid var(--border-glass); margin-bottom: 25px;">
+                <h3 style="color: var(--accent-gold); margin: 0 0 20px 0; font-family: 'Cinzel'; font-size: 16px;">🧬 BREEDING ASSETS</h3>
+                
+                <p style="font-size: 10px; color: #e44444; letter-spacing: 1px; margin-bottom: 10px;">MALES (COCKS)</p>
+                <div id="maleRow" style="display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none;"></div>
+                
+                <p style="font-size: 10px; color: #6a06d5; letter-spacing: 1px; margin: 20px 0 10px 0;">FEMALES (HENS)</p>
+                <div id="femaleRow" style="display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none;"></div>
+                
+                <input type="file" id="parentImgInput" hidden>
+            </div>
+
+            <h3 style="color: var(--accent-gold); margin-bottom: 15px; font-family: 'Cinzel';">🐣 START NEW BATCH</h3>
+            <form id="patchForm" style="padding: 25px; background: var(--card-glass); border-radius: 15px; display: grid; gap: 15px; border: 1px solid var(--border-glass);">
+                <input type="date" name="hatchDate" required style="padding: 12px; background: #111; color: white; border: 1px solid #444; border-radius: 8px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <select name="cockName" id="cockSelect" required style="padding: 12px; background: #111; color: white; border: 1px solid #444; border-radius: 8px;"><option value="">Select Cock</option></select>
+                    <select name="henName" id="henSelect" required style="padding: 12px; background: #111; color: white; border: 1px solid #444; border-radius: 8px;"><option value="">Select Hen</option></select>
+                </div>
+                <input type="number" name="count" placeholder="Initial Chicks Count" required style="padding: 12px; background: #111; color: white; border: 1px solid #444; border-radius: 8px;">
+                <button type="submit" style="background: var(--accent-gold); color: #d65b5b; font-weight: 800; padding: 15px; border: none; border-radius: 8px; cursor: pointer; letter-spacing: 1px;">🚀 LAUNCH BATCH</button>
+            </form>
+
+            <h3 style="color: var(--accent-gold); margin: 40px 0 15px; font-family: 'Cinzel';">📊 PRODUCTION MONITORING</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Parents</th>
+                            <th>Qty</th>
+                            <th>Vac 1</th>
+                            <th>Vac 2</th>
+                            <th>Vac 3</th>
+                            <th style="background: rgba(255,215,0,0.1);"> Inc Wt</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="chickTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sidebar Control
+        const menuBtn = document.getElementById('menuBtn');
+        const sidebar = document.getElementById('sidebar');
+        
+        menuBtn.onclick = (e) => { 
+            e.stopPropagation(); 
+            sidebar.classList.toggle('active'); 
+        };
+
+        document.onclick = (e) => { 
+            if(!sidebar.contains(e.target) && e.target !== menuBtn) {
+                sidebar.classList.remove('active'); 
+            }
+        };
+
+        // Failsafe Loading Screen
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const securityCheck = document.getElementById('security-check');
+                if (securityCheck) {
+                    securityCheck.style.opacity = '0';
+                    setTimeout(() => {
+                        securityCheck.style.display = 'none';
+                    }, 500);
+                }
+            }, 1000);
+        });
+    </script>
+    <script type="module" src="chicks.js"></script>
+</body>
+</html>

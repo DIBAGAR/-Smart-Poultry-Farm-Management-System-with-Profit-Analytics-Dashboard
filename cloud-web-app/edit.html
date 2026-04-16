@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Record | DKS Business</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Specific adjustments for the Edit Form to make it look 'Glassmorphism' */
+        .edit-card {
+            max-width: 500px;
+            margin: 80px auto;
+            padding: 30px;
+            background: var(--card-glass);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            border: 1px solid var(--border-glass);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+        }
+        
+        #formFields label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            font-size: 12px;
+            color: var(--accent-primary);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        #formFields input {
+            width: 100%;
+            margin-bottom: 5px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="edit-card">
+            <h2 style="text-align: center; color: var(--accent-gold); font-family: 'Cinzel'; margin-bottom: 20px;">
+                UPDATE RECORD
+            </h2>
+            
+            <form id="editForm" style="display: block; background: none; border: none; padding: 0;">
+                <div id="formFields">
+                    <p style="text-align: center; color: var(--text-muted);">Fetching secure data...</p>
+                </div>
+
+                <div class="btn-group">
+                    <button type="submit" class="add-btn" style="flex: 2;">💾 SAVE CHANGES</button>
+                    <button type="button" onclick="window.history.back()" class="sidebar-logout" style="flex: 1; margin: 0; padding: 10px;">CANCEL</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
