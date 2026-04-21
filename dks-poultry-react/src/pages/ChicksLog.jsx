@@ -54,6 +54,8 @@ const ChicksLog = () => {
     const [bbRecords, setBbRecords] = useState([]);
     const [jwData, setJwData] = useState(null);
     const [jwId, setJwId] = useState(null);
+    const [bbItems, setBbItems] = useState([{ name: '', qty: '', weight: '' }]);
+    const [jwItems, setJwItems] = useState([{ name: '', qty: '', weight: '' }]);
     const [confirmAction, setConfirmAction] = useState(null); // { message, onConfirm }
 
     /* live data */
@@ -179,6 +181,7 @@ const ChicksLog = () => {
     /* ---- Buy Back ---- */
     const openBuyBack = async (batchId) => {
         setBuyBackSheet(batchId);
+        setBbItems([{ name: '', qty: '', weight: '' }]);
         const snap = await getDoc(doc(db, 'chicks', batchId));
         const ids = snap.data().buyBackIds || [];
         const records = [];
@@ -192,28 +195,47 @@ const ChicksLog = () => {
     const saveBuyBack = async (e) => {
         e.preventDefault();
         const fd = new FormData(e.target);
+        const total = fd.get('total');
+        const paid = fd.get('paid');
+        let dueAmount = 0;
+        if (total && paid) {
+            dueAmount = (parseFloat(total) - parseFloat(paid)).toFixed(2);
+        }
         const payload = {
             batchId: buyBackSheet,
             date: fd.get('date'), 
-            items: [{ name: fd.get('product'), qty: fd.get('qty'), weight: fd.get('weight') }],
+            items: bbItems,
             party: fd.get('party'),
-            totalAmount: Number(fd.get('total')), paidAmount: Number(fd.get('paid'))
+            totalAmount: Number(total), 
+            paidAmount: Number(paid),
+            dueAmount: Number(dueAmount),
+            createdAt: Date.now()
         };
         const ref = await addDoc(collection(db, 'purchase'), payload);
         const pS = await getDoc(doc(db, 'chicks', buyBackSheet));
         const ids = [...(pS.data().buyBackIds || []), ref.id];
         await updateDoc(doc(db, 'chicks', buyBackSheet), { buyBackIds: ids });
         e.target.reset(); showToast('✅ Recorded');
+        setBbItems([{ name: '', qty: '', weight: '' }]);
         openBuyBack(buyBackSheet);
     };
 
     /* ---- Job Work ---- */
     const openJobWork = async (batchId) => {
+        setJwItems([{ name: '', qty: '', weight: '' }]);
         const snap = await getDoc(doc(db, 'chicks', batchId));
         const p = snap.data();
         if (p.jobWorkId) {
             const s = await getDoc(doc(db, 'sales', p.jobWorkId));
-            if (s.exists()) { setJwData(s.data()); setJwId(p.jobWorkId); }
+            if (s.exists()) { 
+                const d = s.data();
+                setJwData(d); setJwId(p.jobWorkId); 
+                if (d.items && d.items.length > 0) {
+                    setJwItems(d.items);
+                } else if (d.product || d.qty || d.weight) {
+                    setJwItems([{ name: d.product || '', qty: d.qty || '', weight: d.weight || '' }]);
+                }
+            }
         } else { setJwData(null); setJwId(null); }
         setJobWorkSheet(batchId);
     };
@@ -221,12 +243,21 @@ const ChicksLog = () => {
     const saveJobWork = async (e) => {
         e.preventDefault();
         const fd = new FormData(e.target);
+        const total = fd.get('total');
+        const paid = fd.get('paid');
+        let dueAmount = 0;
+        if (total && paid) {
+            dueAmount = (parseFloat(total) - parseFloat(paid)).toFixed(2);
+        }
         const payload = {
             batchId: jobWorkSheet,
             date: fd.get('date'), 
-            items: [{ name: fd.get('product'), qty: fd.get('qty'), weight: fd.get('weight') }],
+            items: jwItems,
             party: fd.get('party'),
-            totalAmount: Number(fd.get('total')), paidAmount: Number(fd.get('paid'))
+            totalAmount: Number(total), 
+            paidAmount: Number(paid),
+            dueAmount: Number(dueAmount),
+            createdAt: Date.now()
         };
         if (jwId) { await updateDoc(doc(db, 'sales', jwId), payload); }
         else {
@@ -471,10 +502,37 @@ const ChicksLog = () => {
                 <p style={{ color: 'var(--accent-gold)', fontWeight: '700', marginBottom: '12px', fontSize: '13px' }}>ADD PURCHASE RECORD</p>
                 <form onSubmit={saveBuyBack}>
                     <Field label="Date" name="date" type="date" defaultValue={today()} required />
-                    <Field label="Product" name="product" required />
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                        <Field label="Qty" name="qty" type="number" />
-                        <Field label="Weight (kg)" name="weight" type="number" />
+                    <div style={{ marginTop: '16px', marginBottom: '16px', background: 'rgba(255,255,255,0.02)', padding: '12px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                        <p style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: '700', marginBottom: '10px' }}>ITEMS / PRODUCTS</p>
+                        {bbItems.map((it, idx) => (
+                            <div key={idx} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr auto', gap: '8px', marginBottom: '8px', alignItems: 'end' }}>
+                                <div className="form-group" style={{ marginBottom: 0 }}>
+                                    <input type="text" placeholder="Item Name" value={it.name} onChange={e => {
+                                        const newItems = [...bbItems]; newItems[idx].name = e.target.value; setBbItems(newItems);
+                                    }} required />
+                                </div>
+                                <div className="form-group" style={{ marginBottom: 0 }}>
+                                    <input type="number" placeholder="Qty" value={it.qty} onChange={e => {
+                                        const newItems = [...bbItems]; newItems[idx].qty = e.target.value; setBbItems(newItems);
+                                    }} step="any" />
+                                </div>
+                                <div className="form-group" style={{ marginBottom: 0 }}>
+                                    <input type="number" placeholder="Wt(kg)" value={it.weight} onChange={e => {
+                                        const newItems = [...bbItems]; newItems[idx].weight = e.target.value; setBbItems(newItems);
+                                    }} step="any" />
+                                </div>
+                                {bbItems.length > 1 && (
+                                    <button type="button" onClick={() => setBbItems(bbItems.filter((_, i) => i !== idx))}
+                                        style={{ background: 'rgba(255,71,87,0.1)', border: 'none', color: '#ff4757', borderRadius: '8px', width: '38px', height: '38px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                                        <Trash2 size={16} />
+                                    </button>
+                                )}
+                            </div>
+                        ))}
+                        <button type="button" onClick={() => setBbItems([...bbItems, { name: '', qty: '', weight: '' }])}
+                            className="btn btn-outline" style={{ width: '100%', fontSize: '12px', marginTop: '6px', borderStyle: 'dashed' }}>
+                            + ADD ANOTHER ITEM
+                        </button>
                     </div>
                     <Field label="Supplier" name="party" required />
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
@@ -489,10 +547,37 @@ const ChicksLog = () => {
             <Sheet open={!!jobWorkSheet} onClose={() => setJobWorkSheet(null)} title="JOB WORK / SALES SYNC">
                 <form onSubmit={saveJobWork} key={jobWorkSheet}>
                     <Field label="Date" name="date" type="date" defaultValue={jwData?.date || today()} required />
-                    <Field label="Product" name="product" defaultValue={jwData?.items?.[0]?.name || jwData?.product || ''} required />
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                        <Field label="Qty" name="qty" type="number" defaultValue={jwData?.items?.[0]?.qty || jwData?.qty || ''} />
-                        <Field label="Weight (kg)" name="weight" type="number" defaultValue={jwData?.items?.[0]?.weight || jwData?.weight || ''} />
+                    <div style={{ marginTop: '16px', marginBottom: '16px', background: 'rgba(255,255,255,0.02)', padding: '12px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                        <p style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: '700', marginBottom: '10px' }}>ITEMS / PRODUCTS</p>
+                        {jwItems.map((it, idx) => (
+                            <div key={idx} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr auto', gap: '8px', marginBottom: '8px', alignItems: 'end' }}>
+                                <div className="form-group" style={{ marginBottom: 0 }}>
+                                    <input type="text" placeholder="Item Name" value={it.name} onChange={e => {
+                                        const newItems = [...jwItems]; newItems[idx].name = e.target.value; setJwItems(newItems);
+                                    }} required />
+                                </div>
+                                <div className="form-group" style={{ marginBottom: 0 }}>
+                                    <input type="number" placeholder="Qty" value={it.qty} onChange={e => {
+                                        const newItems = [...jwItems]; newItems[idx].qty = e.target.value; setJwItems(newItems);
+                                    }} step="any" />
+                                </div>
+                                <div className="form-group" style={{ marginBottom: 0 }}>
+                                    <input type="number" placeholder="Wt(kg)" value={it.weight} onChange={e => {
+                                        const newItems = [...jwItems]; newItems[idx].weight = e.target.value; setJwItems(newItems);
+                                    }} step="any" />
+                                </div>
+                                {jwItems.length > 1 && (
+                                    <button type="button" onClick={() => setJwItems(jwItems.filter((_, i) => i !== idx))}
+                                        style={{ background: 'rgba(255,71,87,0.1)', border: 'none', color: '#ff4757', borderRadius: '8px', width: '38px', height: '38px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                                        <Trash2 size={16} />
+                                    </button>
+                                )}
+                            </div>
+                        ))}
+                        <button type="button" onClick={() => setJwItems([...jwItems, { name: '', qty: '', weight: '' }])}
+                            className="btn btn-outline" style={{ width: '100%', fontSize: '12px', marginTop: '6px', borderStyle: 'dashed' }}>
+                            + ADD ANOTHER ITEM
+                        </button>
                     </div>
                     <Field label="Customer" name="party" defaultValue={jwData?.party || ''} required />
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
